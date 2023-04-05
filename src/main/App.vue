@@ -20,15 +20,15 @@
 </template>
 
 <script>
-	import '@/components/Material/css/vue-material.min.css';
-	import '@/components/Material/css/default.css';
+	import '@/components/Material_lib/css/vue-material.min.css';
+	import '@/components/Material_lib/css/default.css';
 	import '@/main/css/main.css';
 	
-	import MdButton from "@/components/Material/MdButton/MdButton.vue"
-	import MdDatepicker from "@/components/Material/MdDatepicker/MdDatepicker.vue"
-	import MdTooltip from "@/components/Material/MdTooltip/MdTooltip.vue"
+	import MdButton from "@/components/Material_lib/MdButton/MdButton.vue"
+	import MdDatepicker from "@/components/Material_lib/MdDatepicker/MdDatepicker.vue"
+	import MdTooltip from "@/components/Material_lib/MdTooltip/MdTooltip.vue"
 
-	import MdCheckbox from "@/components/Material/MdCheckbox/MdCheckbox.vue"
+	import MdCheckbox from "@/components/Material_lib/MdCheckbox/MdCheckbox.vue"
 
 	export default {
 		
