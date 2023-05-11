@@ -1,2 +1,2 @@
 # vue3-material
-A collection of vue material components converted to vue3
+A collection of vue material components (https://github.com/vuematerial/vue-material) converted to vue3
