@@ -261,6 +261,7 @@
     },
     created () {
       this.inputDateToLocalDate = MdDebounce(this.inputDateToLocalDate, this.MdDebounce)
+			this.inputDate = this.modelValue
     }
   }
 </script>

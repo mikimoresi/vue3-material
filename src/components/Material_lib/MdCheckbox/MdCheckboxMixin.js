@@ -62,6 +62,7 @@ export default {
 		modelValue(value){
 			var innerValue = this.innervalue === undefined ? false : this.innervalue;
 			var valueParsed = value === undefined ? false : value;
+			
 			if(innerValue != valueParsed) {
 				
 				this.toggleCheck();
@@ -72,6 +73,7 @@ export default {
   methods: {
     
     toggleCheck () {
+			
       if (!this.disabled) {
         this.rippleActive = true
 				
@@ -79,6 +81,9 @@ export default {
       	this.$emit('update:modelValue', this.innervalue)
 				var _this = this;
 				this.$nextTick(function(){
+					if(_this.innervalue != _this.modelValue) {
+						_this.innervalue = _this.modelValue;
+					}
 					_this.rippleActive = false
 				});
       }
