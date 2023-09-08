@@ -9,28 +9,28 @@
 </template>
 
 <script>
-	import { getCurrentInstance } from "vue";
+  import { getCurrentInstance } from "vue";
   import MdComponent from '../core/MdComponent'
   import MdPropValidator from '../core/utils/MdPropValidator'
   import MdPopover from '../MdPopover/MdPopover.vue'
 
-	
+  
 
   export default new MdComponent({
-		setup() {
+    setup() {
       // accessible inside setup function
       const instance = getCurrentInstance();
-  			
+        
       return {instance}
     },
     name: 'MdTooltip',
-		emit:['update:mdActive'],
+    emit:['update:mdActive'],
     components: {
       MdPopover
     },
     props: {
       mdActive: Boolean,
-			mdTargetref: String,
+      mdTargetref: String,
       mdDelay: {
         type: [String, Number],
         default: 0
@@ -82,21 +82,27 @@
     mounted () {
       this.$nextTick().then(() => {
         this.shouldRender = this.mdActive
-				
-				
-				if(this.mdTargetref) {
-					if(this.instance.parent.refs[this.mdTargetref]) {
-						this.targetEl = this.instance.parent.refs[this.mdTargetref][0];
-					}
-				} else {
-					//console.log(this.instance);
-        	this.targetEl = this.instance.parent.vnode.el;
-					
-				}
+        
+        
+        if(this.mdTargetref) {
+          if(this.instance.parent.refs[this.mdTargetref]) {
+            this.targetEl = this.instance.parent.refs[this.mdTargetref][0];
+          }
+        } else {
+          //console.log(this.instance);
+          this.targetEl = this.instance.parent.vnode.el;
+          
+        }
 
         if (this.targetEl) {
-					
+          
           this.targetEl.addEventListener('mouseenter', this.show, false)
+          var _this = this;
+          this.targetEl.addEventListener('touchstart', function(){
+            setTimeout(function(){
+              _this.hide();
+            },2000);
+          });
           this.targetEl.addEventListener('mouseleave', this.hide, false)
         }
       })
