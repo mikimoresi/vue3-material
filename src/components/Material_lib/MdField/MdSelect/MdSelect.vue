@@ -171,16 +171,17 @@
 			},
 			modelValue(value){
 				
-				//console.log(this.localValue);
 				
-				if(this.localValue != value) {
+				var settingEmpty = !this.localValue && !value;
+				
+				if(this.localValue != value || settingEmpty) {
 					var _this = this;
 					this.$nextTick(()=>{
 						_this.setFieldContent()
-          	_this.MdSelect.modelValue = value
+          	_this.MdSelect.modelValue = settingEmpty ? '' : value
 						
-						var textContent = _this.dropdown_options[value];
-						
+						var textContent = settingEmpty ? '' : _this.dropdown_options[ value ];
+	
 						_this.setContent(textContent);
 						
 					});
@@ -189,7 +190,7 @@
 
           
 					//this.model = value;
-				}
+				} 
 				
 			
 			},
