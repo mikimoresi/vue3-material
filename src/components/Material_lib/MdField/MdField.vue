@@ -527,4 +527,9 @@
       }
     }
   }
+	.md-field:has(.md-input:-webkit-autofill) label, .md-field:has(.md-input:autofill) label {
+		
+    top: 0px;
+    font-size: 12px;
+	}
 </style>
