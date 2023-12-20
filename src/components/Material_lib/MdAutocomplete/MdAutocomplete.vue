@@ -5,6 +5,8 @@
       <md-input
         v-model="searchTerm"
         
+    		@input="searchTerm = $event.target.value"
+				
         :id="mdInputId"
         :name="mdInputName"
         :maxlength="mdInputMaxlength"
@@ -21,9 +23,7 @@
 
         <div class="md-autocomplete-items" v-if="hasFilteredItems ">
           <md-menu-item v-for="(item, index) in getOptionsComputed" :key="index" @click="selectItem(item, $event)">
-            
-						{{item}}
-            
+            <span v-html="$options.filters.highlight(item,[searchTerm])"></span>
           </md-menu-item>
         </div>
 
@@ -181,6 +181,31 @@
 				
 			}
     },
+		filters: {
+			highlight: function (text, words) {
+				var newText = text;
+				for(var i in words) {
+					var query = words[i];
+					//visoDebug(query, (new Error));
+					if(query) {
+						query = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+						//visoDebug(query, (new Error));
+						
+						var check = new RegExp(query, "ig");
+						if(newText) {
+							newText = newText.toString().replace(check, function(matchedText){
+								
+								return ('<strong>' + matchedText + '</strong>');
+								
+								
+							});
+						}
+					}
+				}
+				
+				return newText;
+			}
+		},
     methods: {
 			clearField () {
 				this.searchTerm = "";
@@ -265,14 +290,7 @@
       },
       hideOptions () {
 				
-				//if (!this.showMenu) {
-        //  return false
-        //}
-				//
-				//
-				//console.log('AA')
 				this.showMenu = false
-				//console.log('KK')
 				
         this.$nextTick(() => {
           this.triggerPopover = false
