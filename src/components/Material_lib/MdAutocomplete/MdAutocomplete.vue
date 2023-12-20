@@ -251,11 +251,33 @@
         return this.mdOptions.filter(item => this.matchText(item))
       },
       filterByObject () {
+				
 				//return this.mdOptions;
 				//console.log('jj')
-				return this.mdOptions.filter(item => this.matchText(item.descrizione));
+				const filteredOptions = this.mdOptions.filter(item => this.matchText(item.descrizione));
+				const sortedOptions = this.sortSearchedOptions(filteredOptions) 
+
+  			return sortedOptions;
+				
         
       },
+			sortSearchedOptions: function(filteredOptions) {
+				filteredOptions.sort((a, b) => {
+					const aStartsWithSearch = a.descrizione.toLowerCase().startsWith(this.searchTerm.toLowerCase());
+					const bStartsWithSearch = b.descrizione.toLowerCase().startsWith(this.searchTerm.toLowerCase());
+
+					// Options starting with the search term come first
+					if (aStartsWithSearch && !bStartsWithSearch) {
+						return -1;
+					} else if (!aStartsWithSearch && bStartsWithSearch) {
+						return 1;
+					} else {
+						// For options with equal priority or when none starts with the search term, maintain the original order
+						return 0;
+					}
+				});
+				return filteredOptions;
+			},
       openOnFocus () {
         if (this.mdOpenOnFocus) {
           this.showOptions()
