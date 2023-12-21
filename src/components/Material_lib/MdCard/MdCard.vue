@@ -69,7 +69,7 @@
     }
 
     .md-subhead {
-      opacity: .54;
+      opacity: .84;
       font-size: 14px;
       letter-spacing: .01em;
       line-height: 20px;

@@ -407,7 +407,7 @@
 
     &.md-active,
     &.md-error {
-      font-weight: 500;
+      /*font-weight: 500;*/text-shadow:  var(--font-mboldfixer);
     }
 
     .md-ripple {

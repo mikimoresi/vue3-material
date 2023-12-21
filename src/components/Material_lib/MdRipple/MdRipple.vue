@@ -149,7 +149,7 @@
     width: 100%;
     height: 100%;
     position: relative;
-    z-index: 10;
+    z-index: 9;
     overflow: hidden;
     /*-webkit-mask-image: radial-gradient(circle, #fff 100%, #000 100%);*/
   }

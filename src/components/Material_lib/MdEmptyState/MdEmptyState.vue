@@ -104,7 +104,7 @@
 
   .md-empty-state-label {
     font-size: 26px;
-    font-weight: 500;
+    /*font-weight: 500;*/text-shadow:  var(--font-mboldfixer);
     line-height: 40px;
   }
 

@@ -14,6 +14,7 @@
       MdPortal
     },
     props: {
+			
       mdActive: Boolean,
       mdSettings: {
         type: Object,
@@ -42,6 +43,7 @@
           this.shouldRender = shouldRender
 
           if (shouldRender) {
+						
             this.bindPopper()
           } else {
             this.shouldActivate = false
@@ -53,6 +55,7 @@
           this.createPopper()
         }
       }
+			
     },
     methods: {
       getPopperOptions () {
@@ -123,19 +126,24 @@
         }
       },
       resetPopper () {
+				
         if (this.popperInstance) {
+					
           this.killPopper()
           this.createPopper()
         }
       }
     },
     beforeUnmount () {
+			
       this.killPopper()
     },
     mounted () {
+			
       this.resetPopper()
     },
     render () {
+			
 			const MdPortal = resolveComponent('md-portal')
       return h(MdPortal, {
         ...this.$attrs,

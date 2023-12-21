@@ -123,6 +123,7 @@
       }
     },
     mounted () {
+			//return false;
       this.MdMenu.$el = this.$el
 
       this.$nextTick().then(() => {

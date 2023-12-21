@@ -4,13 +4,14 @@
     <md-input :type="type" ref="input" v-model="inputDate" @focus="onFocus" @blur="onBlur($event)" :pattern="pattern" />
 
     <slot />
-
+		
     <keep-alive>
       <md-datepicker-dialog
         v-if="showDialog"
         v-model:mdDate="localDate"
         :md-disabled-dates="mdDisabledDates"
         :mdImmediately="mdImmediately"
+				
         @mdClosed="toggleDialog"
       />
     </keep-alive>
@@ -44,6 +45,7 @@
       MdDatepickerDialog
     },
     props: {
+			
       value: [String, Number, Date],
       mdDisabledDates: [Array, Function],
       mdOpenOnFocus: {

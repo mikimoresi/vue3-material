@@ -1,5 +1,5 @@
 <template>
-  <md-popover :md-settings="popperSettings" md-active>
+  <md-popover :md-settings="popperSettings" md-active >
     <transition name="md-datepicker-dialog" appear @enter="setContentStyles" @after-leave="resetDate">
       <div class="md-datepicker-dialog" :class="[$mdActiveTheme]">
         <div class="md-datepicker-header">
@@ -136,6 +136,7 @@
 			MdContent
     },
     props: {
+			
       mdDate: Date,
       mdDisabledDates: [Array, Function],
       mdImmediately: {
@@ -273,7 +274,8 @@
             }
           }
         })
-      }
+      },
+			
     },
     methods: {
       setContentStyles () {
@@ -432,7 +434,7 @@
 
     .md-datepicker-year-select {
       cursor: pointer;
-      opacity: .54;
+      opacity: .84;
       transition: opacity .3s $md-transition-default-timing;
       font-size: 16px;
       font-weight: 700;
@@ -442,7 +444,7 @@
 
     .md-datepicker-date-select {
       cursor: pointer;
-      opacity: .54;
+      opacity: .84;
       transition: opacity .3s $md-transition-default-timing;
       font-size: 32px;
       font-weight: 900;
@@ -680,7 +682,7 @@
     cursor: pointer;
     transition: .3s $md-transition-default-timing;
     line-height: 36px;
-    font-weight: 500;
+    /*font-weight: 500;*/text-shadow:  var(--font-mboldfixer);
     text-align: center;
     text-transform: uppercase;
   }

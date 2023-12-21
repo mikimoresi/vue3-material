@@ -163,7 +163,7 @@
     user-select: none;
     border-radius: $md-button-radius;
     font-size: $md-button-font-size;
-    font-weight: 500;
+    /*font-weight: 500;*/text-shadow:  var(--font-mboldfixer);
     text-transform: uppercase;
 
     &:active {

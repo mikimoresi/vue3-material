@@ -3,10 +3,10 @@
 		
     <md-menu md-direction="bottom-start" :md-dense="mdDense" md-align-trigger md-full-width v-model:mdActive="showMenu">
       <md-input
-        v-model="searchTerm"
+				v-model="searchTerm"
         
     		@input="searchTerm = $event.target.value"
-				
+        
         :id="mdInputId"
         :name="mdInputName"
         :maxlength="mdInputMaxlength"
@@ -16,7 +16,7 @@
        
         @click.prevent="openOnFocus" />
 
-      <md-menu-content :class="contentClasses" v-show="hasScopedEmptySlot || hasFilteredItems">
+      <md-menu-content :class="contentClasses" v-show="hasScopedEmptySlot || hasFilteredItems" :show="showMenu">
         <div class="md-autocomplete-loading" v-if="isPromisePending">
           <md-progress-spinner :md-diameter="40" :md-stroke="4" md-mode="indeterminate" />
         </div>
@@ -327,7 +327,7 @@
         this.searchTerm = content
 				
         this.$emit('update:modelValue', item)
-        this.$emit('md-selected', item)
+        this.$emit('md-selected', item, $event)
         this.hideOptions()
       }
     }

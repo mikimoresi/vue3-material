@@ -26,6 +26,8 @@
   import MdList from '@/components/Material_lib/MdList/MdList.vue'
   import MdContains from '../core/utils/MdContains'
 
+	
+
   export default new MdComponent({
 		emits:['setParentOffsets'],
     name: 'MdMenuContent',
@@ -37,7 +39,9 @@
     props: {
       mdListClass: [String, Boolean],
       mdContentClass: [String, Boolean],
-			listenTyping: [Boolean]
+			listenTyping: [Boolean],
+			id:[String],
+			show:[Boolean]
     },
     inject: ['MdMenu'],
     data: () => ({
@@ -48,7 +52,10 @@
       menuStyles: '',
 			observerTimeout:false,
 			typingTimeout: false,
-			typingBuffer:''
+			typingBuffer:'',
+			I_id:false,
+			I_keyListenersEnabled:false
+			
     }),
     computed: {
       filteredAttrs () {
@@ -100,7 +107,8 @@
             
           }, 200)
         }
-      }
+      },
+			
     },
     methods: {
       setPopperSettings () {
@@ -185,6 +193,7 @@
 					if(fromTyping && this.typingBuffer.length > 0) {
 						var index = this.getIndexHighlightFromTyping()
 						this.highlightIndex = index
+						
 					
 					} else {
 						if (direction === 'down') {
@@ -200,7 +209,9 @@
 								this.highlightIndex--
 							}
 						}
+						
 					}
+					//console.log(this.highlightIndex);
 
           this.clearAllHighlights()
           this.setItemHighlight()
@@ -233,6 +244,7 @@
       },
       onEsc () {
         this.MdMenu.active = false
+				
         this.destroyKeyDownListener()
       },
       getOffsets () {
@@ -265,18 +277,32 @@
               this.MdMenu.active = false
               this.MdMenu.bodyClickObserver.destroy()
               this.MdMenu.windowResizeObserver.destroy()
+							//console.log('b')
               this.destroyKeyDownListener()
             }
           })
         }
       },
-      createKeydownListener () {
-        window.addEventListener('keydown', this.keyNavigation)
+      createKeydownListener () {	
+				var id = this.id ? this.id : this.I_id			
+				if(this.I_keyListenersEnabled) {
+					return false
+				}
+				this.keyNavigationListener = event => this.keyNavigation(event, id);
+        window.addEventListener('keydown', this.keyNavigationListener)
+				this.I_keyListenersEnabled = true;
       },
       destroyKeyDownListener () {
-        window.removeEventListener('keydown', this.keyNavigation)
+						
+        window.removeEventListener('keydown', this.keyNavigationListener)
+				this.I_keyListenersEnabled = false
+				
       },
-      keyNavigation (event) {
+      keyNavigation (event, id) {
+				if(!this.show || (this.id && id !== this.id) || (!this.id && this.I_id && id != this.I_id)) {
+					return false;
+				}
+				
 				
         switch (event.key) {
 					case 'ArrowUp':
@@ -297,9 +323,13 @@
 
 					case 'Space':
 						this.setSelection()
+						event.stopPropagation();
 						break
 
 					case 'Escape':
+						this.onEsc()
+						break
+					case 'Tab':
 						this.onEsc()
 						break
 					default:
@@ -359,6 +389,10 @@
       }
     },
     mounted () {
+			//return false
+			if(!this.id) {
+				this.I_id = (Math.floor(Math.random() * (9999 - 999 + 1)) + 999)+''
+			}
       this.$nextTick().then(() => {
         this.setHighlightItems()
         this.setupWatchers()
@@ -374,6 +408,7 @@
       if (this.MdMenu.windowResizeObserver) {
         this.MdMenu.windowResizeObserver.destroy()
       }
+			
       this.destroyKeyDownListener()
     }
   })

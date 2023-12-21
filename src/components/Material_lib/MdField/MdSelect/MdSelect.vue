@@ -40,6 +40,8 @@
 				:class="!showSelect ? 'hide':''"
 				:md-content-class="mdClass"
 				:listenTyping="true"
+				:id="id"
+				:show="showSelect"
 				:style="menuStyles"
 				
 				@setParentOffsets="setOffsets"
@@ -105,7 +107,7 @@
           x: defaultOffset.x,
           y: 0
         },
-        showSelect: true,
+        showSelect: false,
 				avoidLocalValueWatch:false,
 				//removeHighlightshowSelectTimeout:false,
         didMount: false,
@@ -118,7 +120,8 @@
           setContent: this.setContent,
           setMultipleValue: this.setMultipleValue,
           setMultipleContent: this.setMultipleContent
-        },
+        }
+				
 				
       }
     },
@@ -430,6 +433,7 @@
       }
     },
     mounted () {
+			
       this.showSelect = false
 			this.localValue = this.modelValue;
       this.setFieldContent()
