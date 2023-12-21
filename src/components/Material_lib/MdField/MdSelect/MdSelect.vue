@@ -23,6 +23,8 @@
       :placeholder="placeholder"
       v-on="inputListeners"
 			
+			
+			
       @focus.prevent="onFocus"
       @blur.prevent="removeHighlight"
       @click="openSelect"
@@ -31,12 +33,15 @@
       @keydown.space="openSelect"  />
     <md-drop-down-icon @click="openSelect" />
 
-    <KeepAlive>
+    
 			<md-menu-content
 				ref="menu"
 				class="md-select-menu "
+				:class="!showSelect ? 'hide':''"
 				:md-content-class="mdClass"
+				:listenTyping="true"
 				:style="menuStyles"
+				
 				@setParentOffsets="setOffsets"
 				@enter="onMenuEnter">
 				
@@ -46,7 +51,7 @@
 					:value="index">{{option}}
 				</md-option>
 			</md-menu-content>
-		</KeepAlive>
+		
    
 
    
@@ -101,6 +106,7 @@
           y: 0
         },
         showSelect: true,
+				avoidLocalValueWatch:false,
 				//removeHighlightshowSelectTimeout:false,
         didMount: false,
         MdSelect: {
@@ -112,7 +118,8 @@
           setContent: this.setContent,
           setMultipleValue: this.setMultipleValue,
           setMultipleContent: this.setMultipleContent
-        }
+        },
+				
       }
     },
     provide () {
@@ -171,9 +178,10 @@
 			},
 			modelValue(value){
 				
-				
+				//console.log('local-> '+this.localValue);
+				//console.log('val-> '+value);
 				var settingEmpty = !this.localValue && !value;
-				
+				var settingEmptyFromFull = this.localValue && !value;
 				if(this.localValue != value || settingEmpty) {
 					var _this = this;
 					this.$nextTick(()=>{
@@ -181,8 +189,16 @@
           	_this.MdSelect.modelValue = settingEmpty ? '' : value
 						
 						var textContent = settingEmpty ? '' : _this.dropdown_options[ value ];
-	
+					
 						_this.setContent(textContent);
+
+						if(settingEmpty ) {
+							if(settingEmptyFromFull) {
+								_this.avoidLocalValueWatch = true;
+							}
+							_this.localValue = "";
+							//console.log('emptyLocalValue-> '+_this.localValue);
+						}
 						
 					});
 					
@@ -196,8 +212,7 @@
 			},
 			model (val) {
 			
-      	//console.log('LLLSLSLSL')
-				//console.log(this.localValue);
+      	//console.log('watch model->'+val)
 				this.localValue = val
 				
 			
@@ -205,8 +220,13 @@
       localValue: {
         immediate: true,
         handler (val) {
-					
+					//console.log('watch localValue->'+val)
+					if(val === undefined && this.MdSelect.modelValue === undefined) {
+						return false;
+					}
           this.setFieldContent()
+					//console.log('watch localValue mv->'+this.MdSelect.modelValue)
+					//console.log('watch localValue lv->'+this.localValue)
           this.MdSelect.modelValue = this.localValue
 
           if (this.didMount) {
@@ -241,7 +261,7 @@
 
           if (menu) {
             const selected = target || menu.querySelector('.md-selected')
-
+						
             if (selected) {
               this.scrollToSelectedOption(selected, menu)
               this.offset.y = defaultOffset.y - selected.offsetTop + menu.scrollTop + 8
@@ -325,10 +345,15 @@
         }
       },
       setValue (newValue) {
-				
+				//console.log('setValue newvalue->'+newValue)
+				//console.log('setValue modelValu->'+this.modelValue)
+				//console.log('setValue localValue->'+this.localValue)
+				if(newValue == this.localValue && this.modelValue != newValue) {
+					this.localValue = "";
+				}
 				if(newValue != this.modelValue) {
 					this.model = newValue
-					//console.log('a');
+					//console.log('setValue model->'+this.model)
 					this.setFieldValue()
 					this.showSelect = false
 				}
@@ -414,6 +439,7 @@
       })
     },
     vnodeUpdated () {
+			//console.log('watch vnodeUpdated->'+val)
       this.setFieldContent()
     }
   }
@@ -464,4 +490,8 @@
       transition: opacity .3s $md-transition-drop-timing;
     }
   }
+	.hide {
+		opacity:0;
+		pointer-events:none
+	}
 </style>

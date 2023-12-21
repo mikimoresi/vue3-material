@@ -36,7 +36,8 @@
     },
     props: {
       mdListClass: [String, Boolean],
-      mdContentClass: [String, Boolean]
+      mdContentClass: [String, Boolean],
+			listenTyping: [Boolean]
     },
     inject: ['MdMenu'],
     data: () => ({
@@ -45,7 +46,9 @@
       highlightItems: [],
       popperSettings: null,
       menuStyles: '',
-			observerTimeout:false
+			observerTimeout:false,
+			typingTimeout: false,
+			typingBuffer:''
     }),
     computed: {
       filteredAttrs () {
@@ -147,23 +150,57 @@
           this.highlightItems = Array.from(items)
         }
       },
-      setHighlight (direction) {
+			getIndexHighlightFromTyping () {
+				var _this = this
+				var idx = 0
+				var matchedStart = false
+				var matchedContains = false
+				for (const el of this.highlightItems) {
+					
+					var textEl = el.querySelector('.md-list-item-text');
+					if(textEl) {
+						var text = textEl.innerHTML.toLowerCase();
+						
+						if(text) {
+							if(text.startsWith(_this.typingBuffer)) {
+								matchedStart = true
+								break;
+							} else if (_this.typingBuffer.length > 1 && text.includes(_this.typingBuffer) && !text.startsWith('-')) {
+								
+								matchedContains = idx
+
+							}
+						}
+					}
+					idx++
+				}
+				
+				
+				return matchedStart ? idx : (matchedContains ? matchedContains : 0)
+			},
+      setHighlight (direction, fromTyping) {
         this.setHighlightItems()
 
         if (this.highlightItems.length) {
-          if (direction === 'down') {
-            if (this.highlightIndex === this.highlightItems.length - 1) {
-              this.highlightIndex = 0
-            } else {
-              this.highlightIndex++
-            }
-          } else {
-            if (this.highlightIndex === 0) {
-              this.highlightIndex = this.highlightItems.length - 1
-            } else {
-              this.highlightIndex--
-            }
-          }
+					if(fromTyping && this.typingBuffer.length > 0) {
+						var index = this.getIndexHighlightFromTyping()
+						this.highlightIndex = index
+					
+					} else {
+						if (direction === 'down') {
+							if (this.highlightIndex === this.highlightItems.length - 1) {
+								this.highlightIndex = 0
+							} else {
+								this.highlightIndex++
+							}
+						} else {
+							if (this.highlightIndex === 0) {
+								this.highlightIndex = this.highlightItems.length - 1
+							} else {
+								this.highlightIndex--
+							}
+						}
+					}
 
           this.clearAllHighlights()
           this.setItemHighlight()
@@ -264,8 +301,35 @@
 
 					case 'Escape':
 						this.onEsc()
+						break
+					default:
+						if(this.listenTyping) {
+							this.onTyping(event)
+						}
+
         }
       },
+			onTyping (event) {
+				if(event && event.key && event.key.length == 1 && /^[A-Za-z0-9]*$/.test(event.key)) {
+					if(this.typingTimeout) {
+						clearTimeout(this.typingTimeout)
+					}
+					//console.log(this.typingBuffer)
+
+					this.typingBuffer += event.key
+					this.setHighlight(false, true)
+					
+					var _this = this
+
+					this.typingTimeout = setTimeout(function() {
+						
+						_this.typingBuffer = ""
+						
+					},400)
+				}
+				
+				
+			},
       createResizeObserver () {
 				
         this.MdMenu.windowResizeObserver =  MdResizeObserver(window, this.setStyles)
@@ -288,8 +352,8 @@
         const body = document.body
         const { top, left } = body.getBoundingClientRect()
 
-        const scrollLeft = window.pageXOffset !== undefined ? window.pageXOffset : body.scrollLeft
-        const scrollTop = window.pageYOffset !== undefined ? window.pageYOffset : body.scrollTop
+        const scrollLeft = window.scrollX !== undefined ? window.scrollX : body.scrollLeft
+        const scrollTop = window.scrollY !== undefined ? window.scrollY : body.scrollTop
 
         return { x: left + scrollLeft, y: top + scrollTop }
       }

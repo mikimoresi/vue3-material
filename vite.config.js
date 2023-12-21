@@ -9,6 +9,7 @@ export default defineConfig(({ command, ssrBuild }) => ({
 	resolve: {
     alias: {
       "@": path.resolve(__dirname, 'src'),
+			"@localconfig": path.resolve(__dirname, 'src'),
     }
   },
   plugins: [

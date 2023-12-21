@@ -265,14 +265,15 @@
     }
 
     .md-input-action {
-      width: 32px;
-      min-width: 32px;
-      height: 32px;
+      width: 22px;
+      min-width: 22px;
+      height: 22px;
       margin: 0;
       position: absolute;
-      top: 16px;
+      top: 22px;
       right: 0;
       transition: $md-transition-default;
+			line-height: 11px;
 
       &.md-input-action-enter-active,
       &.md-input-action-leave-active {

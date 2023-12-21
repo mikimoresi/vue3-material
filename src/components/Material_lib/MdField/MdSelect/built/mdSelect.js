@@ -1474,7 +1474,7 @@ const Ei = new T({
           `);
     },
     getBodyPosition() {
-      const e = document.body, { top: t, left: i } = e.getBoundingClientRect(), n = window.pageXOffset !== void 0 ? window.pageXOffset : e.scrollLeft, s = window.pageYOffset !== void 0 ? window.pageYOffset : e.scrollTop;
+      const e = document.body, { top: t, left: i } = e.getBoundingClientRect(), n = window.scrollX !== void 0 ? window.scrollX : e.scrollLeft, s = window.scrollY !== void 0 ? window.scrollY : e.scrollTop;
       return { x: i + n, y: t + s };
     }
   },
