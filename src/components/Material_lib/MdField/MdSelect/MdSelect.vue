@@ -175,6 +175,7 @@
 					
 					var textContent = _this.dropdown_options[_this.modelValue];
 					
+					
 					_this.setContent(textContent);
 					
 				});
@@ -365,7 +366,8 @@
         this.MdSelect.label = newLabel
       },
       setContentByValue () {
-        const textContent = this.MdSelect.items[this.localValue]
+				
+        const textContent = this.dropdown_options[this.localValue]
 
         if (textContent) {
           this.setContent(textContent)
@@ -436,6 +438,7 @@
 			
       this.showSelect = false
 			this.localValue = this.modelValue;
+			
       this.setFieldContent()
 
       this.$nextTick().then(() => {
@@ -444,6 +447,7 @@
     },
     vnodeUpdated () {
 			//console.log('watch vnodeUpdated->'+val)
+		
       this.setFieldContent()
     }
   }
